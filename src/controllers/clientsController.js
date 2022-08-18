@@ -1,20 +1,26 @@
-export async function PostClient(req, res){
-    const clientData = req.body
+import {CreateClient} from "../repositories/clientsRepository.js"
 
-    try{
+export async function PostClient(req, res){
+    const data = req.body
+    
+    try{       
+
+        await CreateClient(data.name, data.address, data.phone)
+
+        res.sendStatus(201)
 
     }catch(error){
-        req.sendStatus(500)
+        res.status(500).send(error)
     }
 
 }
 
-export async function getClientById(req, res){    
+export async function GetClientById(req, res){    
 
     try{
 
     }catch(error){
-        req.sendStatus(500)
+        res.status(500).send(error)
     }
 
 }

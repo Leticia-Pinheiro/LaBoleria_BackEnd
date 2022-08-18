@@ -1,8 +1,10 @@
 import { Router } from "express"
-import PostCake from "../controllers/cakesController.js"
+import validateSchema from "../middlewares/schemasValidator.js"
+import CakeSchema from "../schemas/cakesSchema.js"
+import {PostCake} from "../controllers/cakesController.js"
 
 const cakesRouter = Router()
 
-cakesRouter.post('/cakes', PostCake)
+cakesRouter.post('/cakes', validateSchema(CakeSchema), PostCake)
 
 export default cakesRouter 

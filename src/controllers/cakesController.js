@@ -1,12 +1,21 @@
-import CakeSchema from "../schemas/cakesSchema"
+import {SearchCake, CreateCake} from "../repositories/cakesRespository.js"
 
 export async function PostCake(req, res){
-    const cakeData = req.body
-
+    const data = req.body
+    
     try{
+        const { rows: cake } = await SearchCake(data.name)
+        
+        if(cake.length){
+            return res.status(409).send("Bolo já cadastrado!");
+        }
+
+        await CreateCake(data.name, data.price, data.description, data.image)
+
+        res.sendStatus(201)
 
     }catch(error){
-        req.sendStatus(500)
+        res.status(500).send(error)
     }
 
 }
