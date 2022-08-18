@@ -43,12 +43,34 @@ export async function GetAllOrders(date){
     JOIN clients cl
     ON cl.id = o."clientId"
     JOIN cakes ca
-    ON ca.id = o."cakeId"        
-    `
-
-    if(date){
-        query += ``
-    }
+    ON ca.id = o."cakeId"      
+    `   
 
     return await connection.query(query)
+}
+
+export async function GetOrderId(id){
+    return await connection.query(
+        `
+        SELECT o.id AS "orderId",
+        o."createdAt",
+        o.quantity,
+        o."totalPrice",
+        cl.id AS "clientId",
+        cl.name AS "clientName",
+        cl.address,
+        cl.phone,
+        ca.id AS "cakeId",
+        ca.name AS "cakeName",
+        ca.price,
+        ca.image,
+        ca.description
+        FROM orders o
+        JOIN clients cl
+        ON cl.id = o."clientId"
+        JOIN cakes ca
+        ON ca.id = o."cakeId"   
+        WHERE o.id  = $1     
+        `, [id]
+    )
 }
