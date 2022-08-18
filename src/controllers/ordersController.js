@@ -1,4 +1,9 @@
-import {GetPrice, CreateOrder, SearchClient, SearchCake} from "../repositories/ordersRepository.js"
+import {GetPrice, 
+    CreateOrder, 
+    SearchClient, 
+    SearchCake,
+    GetAllOrders} 
+    from "../repositories/ordersRepository.js"
 
 export async function PostOrder(req, res){
     const data = req.body
@@ -30,8 +35,37 @@ export async function PostOrder(req, res){
 }
 
 export async function GetOrder(req, res){
+    const { date } = req.query
 
-    try{
+    try{        
+        const { rows: orders } = await GetAllOrders(date)
+        if(orders.length === 0){
+            return res.status(404).send([])
+        }
+
+        const ordersObject = orders.map((order) => (
+            {
+                client: {
+                    id: order.clientId,
+                    name: order.clientName,
+                    address: order.address,
+                    phone: order.phone
+                },
+                cake: {
+                    id: order.cakeId,
+                    name: order.cakeName,
+                    price: order.price,
+                            description: order.description,
+                            image: order.image
+                },
+                orderId: order.orderId,
+                createdAt: order.createdAt,
+                quantity: order.quantity,
+                totalPrice: order.totalPrice
+            })            
+        )
+
+        res.status(200).send(ordersObject)
 
     }catch(error){
         res.status(500).send(error)
