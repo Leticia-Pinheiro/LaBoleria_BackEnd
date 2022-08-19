@@ -25,8 +25,8 @@ export async function SearchClient(clientId){
 	);
 }
 
-export async function GetAllOrders(date){   
-    const query = `SELECT o.id AS "orderId",
+export async function GetAllOrders(date){       
+    let query = `SELECT o.id AS "orderId",
     o."createdAt",
     o.quantity,
     o."totalPrice",
@@ -43,10 +43,14 @@ export async function GetAllOrders(date){
     JOIN clients cl
     ON cl.id = o."clientId"
     JOIN cakes ca
-    ON ca.id = o."cakeId"      
-    `   
+    ON ca.id = o."cakeId"          
+    `
 
-    return await connection.query(query)
+    if(date){
+        query += (` WHERE o."createdAt" = $1`) 
+    }
+    
+    return await connection.query(query, [date])
 }
 
 export async function GetOrderId(id){

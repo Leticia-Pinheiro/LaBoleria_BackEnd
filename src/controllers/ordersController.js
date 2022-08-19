@@ -36,7 +36,8 @@ export async function PostOrder(req, res){
 }
 
 export async function GetOrder(req, res){    
-    const { date } = req.query
+    const date  = req.query.date    
+    
 
     try{        
         const { rows: orders } = await GetAllOrders(date)
