@@ -50,7 +50,7 @@ export async function GetAllOrders(date){
         query += (` WHERE o."createdAt" = $1`) 
     }
     
-    return await connection.query(query, [date])
+    return await connection.query(query)
 }
 
 export async function GetOrderId(id){
